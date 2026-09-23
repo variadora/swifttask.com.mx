@@ -1,14 +1,10 @@
 import "@/App.css";
 import React, { useRef, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ReactLenis } from "lenis/react";
 import { Toaster } from "sonner";
-import { Navbar } from "@/components/landing/Navbar";
-import { Hero } from "@/components/landing/Hero";
-import { Marquee } from "@/components/landing/Marquee";
-import { Services } from "@/components/landing/Services";
-import { About } from "@/components/landing/About";
-import { Contact } from "@/components/landing/Contact";
-import { Footer } from "@/components/landing/Footer";
+import Landing from "@/pages/Landing";
+import Admin from "@/pages/Admin";
 
 function App() {
   const lenisRef = useRef(null);
@@ -25,16 +21,13 @@ function App() {
 
   return (
     <ReactLenis ref={lenisRef} root options={{ lerp: 0.09, smoothWheel: true }}>
-      <div className="App st-grain bg-[#050505] min-h-screen" data-testid="landing-root">
-        <Navbar />
-        <main>
-          <Hero />
-          <Marquee />
-          <Services />
-          <About />
-          <Contact />
-        </main>
-        <Footer />
+      <div className="App bg-[#050505] min-h-screen">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </BrowserRouter>
         <Toaster
           position="bottom-right"
           theme="dark"
