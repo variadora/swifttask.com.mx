@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -31,6 +31,7 @@ db = client[os.environ['DB_NAME']]
 JWT_SECRET = os.environ['JWT_SECRET']
 JWT_ALGORITHM = "HS256"
 ADMIN_PASSWORD = os.environ['ADMIN_PASSWORD']
+_login_attempts: dict = {}
 
 EMAIL_BASE_URL = "https://integrations.emergentagent.com"
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY")
@@ -279,9 +280,17 @@ async def create_contact_message(payload: ContactMessageCreate):
 
 
 @api_router.post("/admin/login")
-async def admin_login(payload: AdminLogin):
+async def admin_login(payload: AdminLogin, request: Request):
+    ip = request.client.host if request.client else "unknown"
+    now = datetime.now(timezone.utc)
+    attempts = [t for t in _login_attempts.get(ip, []) if (now - t).total_seconds() < 60]
+    if len(attempts) >= 5:
+        raise HTTPException(status_code=429, detail="Demasiados intentos. Espera un minuto.")
     if not secrets.compare_digest(payload.password, ADMIN_PASSWORD):
+        attempts.append(now)
+        _login_attempts[ip] = attempts
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+    _login_attempts.pop(ip, None)
     return {"token": create_admin_token(), "token_type": "bearer"}
 
 
