@@ -5,6 +5,7 @@ import { ReactLenis } from "lenis/react";
 import { Toaster } from "sonner";
 import Landing from "@/pages/Landing";
 import Admin from "@/pages/Admin";
+import Casos from "@/pages/Casos";
 
 function App() {
   const lenisRef = useRef(null);
@@ -25,6 +26,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/casos" element={<Casos />} />
             <Route path="/admin" element={<Admin />} />
           </Routes>
         </BrowserRouter>

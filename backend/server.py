@@ -37,6 +37,7 @@ EMAIL_BASE_URL = "https://integrations.emergentagent.com"
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "SWIFT TASK")
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
+TEAM_NOTIFY_EMAIL = os.environ.get("TEAM_NOTIFY_EMAIL")
 
 # Create the main app without a prefix
 app = FastAPI(title="SWIFT TASK API")
@@ -233,6 +234,36 @@ def _confirmation_html(name: str, service: Optional[str], message: str) -> str:
     )
 
 
+def _team_alert_html(msg) -> str:
+    company = f'<tr><td style="padding:4px 0;color:#888">Empresa</td><td style="padding:4px 0;color:#0b0c0f"><strong>{escape(msg.company)}</strong></td></tr>' if msg.company else ""
+    service = f'<tr><td style="padding:4px 0;color:#888">Servicio</td><td style="padding:4px 0;color:#0b0c0f"><strong>{escape(msg.service)}</strong></td></tr>' if msg.service else ""
+    return (
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+        'style="background:#0b0c0f;padding:32px 0"><tr><td align="center">'
+        '<table role="presentation" width="560" cellpadding="0" cellspacing="0" '
+        'style="background:#ffffff;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif">'
+        '<tr><td style="background:#050505;padding:24px 32px">'
+        '<span style="color:#ffffff;font-size:18px;font-weight:bold;letter-spacing:1px">SWIFT</span>'
+        '<span style="color:#00E5FF;font-size:18px;font-weight:bold;letter-spacing:1px">TASK</span>'
+        '<span style="color:#888;font-size:12px;margin-left:12px">Alerta interna</span>'
+        '</td></tr>'
+        '<tr><td style="padding:32px">'
+        '<h1 style="margin:0 0 16px;font-size:20px;color:#0b0c0f">Nuevo mensaje de contacto</h1>'
+        '<table role="presentation" width="100%" style="font-size:14px;border-collapse:collapse">'
+        f'<tr><td style="padding:4px 0;color:#888;width:110px">Nombre</td><td style="padding:4px 0;color:#0b0c0f"><strong>{escape(msg.name)}</strong></td></tr>'
+        f'<tr><td style="padding:4px 0;color:#888">Correo</td><td style="padding:4px 0;color:#0b0c0f"><a href="mailto:{escape(msg.email)}" style="color:#0077aa">{escape(msg.email)}</a></td></tr>'
+        f'{company}{service}'
+        '</table>'
+        '<p style="margin:20px 0 8px;color:#444">Mensaje:</p>'
+        f'<blockquote style="margin:0;padding:12px 16px;background:#f4f5f7;border-left:3px solid #00E5FF;'
+        f'color:#333;line-height:1.5;border-radius:4px">{escape(msg.message)}</blockquote>'
+        '</td></tr>'
+        '<tr><td style="padding:20px 32px;background:#f4f5f7">'
+        '<p style="margin:0;font-size:12px;color:#888">Notificación automática del formulario de contacto de SWIFT TASK.</p>'
+        '</td></tr>'
+        '</table></td></tr></table>'
+    )
+
 
 # ---------------- Routes ----------------
 @api_router.get("/")
@@ -275,6 +306,17 @@ async def create_contact_message(payload: ContactMessageCreate):
         )
     except Exception as e:
         logger.error("Confirmation email failed for %s: %s", msg.email, e)
+
+    # Send internal alert to the team (non-blocking failure)
+    if TEAM_NOTIFY_EMAIL:
+        try:
+            await send_email(
+                to=TEAM_NOTIFY_EMAIL,
+                subject=f"Nuevo mensaje de contacto: {msg.name}",
+                html=_team_alert_html(msg),
+            )
+        except Exception as e:
+            logger.error("Team alert email failed: %s", e)
 
     return msg
 

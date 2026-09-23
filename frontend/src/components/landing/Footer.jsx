@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { scrollToId } from "./scroll";
 
@@ -14,11 +15,12 @@ export const Footer = () => {
               Consultoría en computación, software, ciberseguridad y soporte para empresas que no se detienen.
             </p>
           </div>
-          <nav className="flex flex-wrap gap-x-8 gap-y-3">
+          <nav className="flex flex-wrap gap-x-8 gap-y-3 items-center">
             {[
               { l: "Inicio", h: "#inicio" },
               { l: "Servicios", h: "#servicios" },
               { l: "Nosotros", h: "#nosotros" },
+              { l: "Testimonios", h: "#testimonios" },
               { l: "Contacto", h: "#contacto" },
             ].map((i) => (
               <button
@@ -30,6 +32,14 @@ export const Footer = () => {
                 {i.l}
               </button>
             ))}
+            <Link
+              to="/casos"
+              onClick={() => window.scrollTo(0, 0)}
+              data-testid="footer-link-casos"
+              className="font-mono text-xs uppercase tracking-[0.18em] text-white/55 hover:text-[#00E5FF] transition-colors duration-300"
+            >
+              Casos
+            </Link>
           </nav>
         </div>
         <div className="mt-12 pt-6 border-t border-[#1E2028] flex flex-col sm:flex-row justify-between gap-3">

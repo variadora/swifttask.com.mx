@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { scrollToId } from "./scroll";
@@ -8,6 +9,7 @@ const LINKS = [
   { label: "Inicio", href: "#inicio", id: "nav-inicio" },
   { label: "Servicios", href: "#servicios", id: "nav-servicios" },
   { label: "Nosotros", href: "#nosotros", id: "nav-nosotros" },
+  { label: "Casos", to: "/casos", id: "nav-casos" },
   { label: "Testimonios", href: "#testimonios", id: "nav-testimonios" },
   { label: "Contacto", href: "#contacto", id: "nav-contacto" },
 ];
@@ -15,6 +17,7 @@ const LINKS = [
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -22,9 +25,14 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const go = (href) => {
+  const go = (item) => {
     setOpen(false);
-    scrollToId(href);
+    if (item.to) {
+      navigate(item.to);
+      window.scrollTo(0, 0);
+    } else {
+      scrollToId(item.href);
+    }
   };
 
   return (
@@ -38,7 +46,7 @@ export const Navbar = () => {
       data-testid="navbar"
     >
       <div className="mx-auto max-w-[1280px] px-6 lg:px-10 h-[68px] flex items-center justify-between">
-        <button onClick={() => go("#inicio")} className="focus:outline-none" data-testid="nav-logo-button">
+        <button onClick={() => go({ href: "#inicio" })} className="focus:outline-none" data-testid="nav-logo-button">
           <Logo />
         </button>
 
@@ -47,7 +55,7 @@ export const Navbar = () => {
             <button
               key={l.id}
               data-testid={l.id}
-              onClick={() => go(l.href)}
+              onClick={() => go(l)}
               className="font-mono text-xs uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors duration-300"
             >
               {l.label}
@@ -56,7 +64,7 @@ export const Navbar = () => {
         </nav>
 
         <button
-          onClick={() => go("#contacto")}
+          onClick={() => go({ href: "#contacto" })}
           data-testid="nav-cta-button"
           className="hidden md:inline-flex items-center font-mono text-xs uppercase tracking-[0.18em] px-5 py-2.5 rounded-full border border-[#00E5FF]/40 text-[#00E5FF] hover:bg-[#00E5FF] hover:text-[#050505] transition-colors duration-300"
         >
@@ -81,7 +89,7 @@ export const Navbar = () => {
                 <button
                   key={l.id}
                   data-testid={`${l.id}-mobile`}
-                  onClick={() => go(l.href)}
+                  onClick={() => go(l)}
                   className="text-left font-mono text-sm uppercase tracking-[0.18em] text-white/70"
                 >
                   {l.label}
