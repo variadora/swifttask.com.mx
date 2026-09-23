@@ -56,7 +56,7 @@ export const Contact = () => {
         <div className="lg:col-span-5">
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-10 bg-[#00E5FF]" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00E5FF]">03 / Contacto</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#00E5FF]">04 / Contacto</span>
           </div>
           <h2 className="font-heading font-black tracking-tighter text-white text-4xl sm:text-5xl lg:text-6xl leading-[0.95] mb-8">
             Hablemos de tu proyecto

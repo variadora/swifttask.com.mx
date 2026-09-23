@@ -8,6 +8,7 @@ const LINKS = [
   { label: "Inicio", href: "#inicio", id: "nav-inicio" },
   { label: "Servicios", href: "#servicios", id: "nav-servicios" },
   { label: "Nosotros", href: "#nosotros", id: "nav-nosotros" },
+  { label: "Testimonios", href: "#testimonios", id: "nav-testimonios" },
   { label: "Contacto", href: "#contacto", id: "nav-contacto" },
 ];
 
