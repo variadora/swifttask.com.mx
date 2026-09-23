@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #050505;
+    color: #F3F4F6;
+}
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+    :root {
+        --background: 240 10% 2%;
+        --foreground: 220 14% 96%;
+        --card: 228 14% 7%;
+        --card-foreground: 220 14% 96%;
+        --popover: 228 14% 7%;
+        --popover-foreground: 220 14% 96%;
+        --primary: 187 100% 50%;
+        --primary-foreground: 240 10% 2%;
+        --secondary: 228 12% 12%;
+        --secondary-foreground: 220 14% 96%;
+        --muted: 228 12% 12%;
+        --muted-foreground: 220 9% 64%;
+        --accent: 187 100% 50%;
+        --accent-foreground: 240 10% 2%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 228 14% 14%;
+        --input: 228 14% 14%;
+        --ring: 187 100% 50%;
+        --radius: 0.5rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* ---- Custom selection & scrollbar ---- */
+::selection {
+    background: #00E5FF;
+    color: #050505;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+/* ---- Marquee ---- */
+@keyframes st-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+.st-marquee-track {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: st-marquee 32s linear infinite;
+    will-change: transform;
+}
+
+/* ---- Grain overlay ---- */
+.st-grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .st-marquee-track { animation: none; }
+}
+
+/* ---- Form inputs (dark theme) ---- */
+.st-input {
+    background-color: #0A0B0E !important;
+    border-color: #1E2028 !important;
+    color: #F3F4F6 !important;
+    height: 3rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+textarea.st-input { height: auto; }
+.st-input::placeholder { color: rgba(255,255,255,0.28); }
+.st-input:focus,
+.st-input:focus-visible {
+    border-color: #00E5FF !important;
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.4), 0 0 14px rgba(0,229,255,0.15) !important;
+    outline: none !important;
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+}

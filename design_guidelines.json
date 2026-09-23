@@ -1,0 +1,112 @@
+{
+  "theme": "dark",
+  "project_name": "SWIFT TASK, S.A. de C.V.",
+  "type": "landing_page",
+  "typography": {
+    "headings": {
+      "font": "Chivo",
+      "import": "@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700;900&display=swap');",
+      "strategy": "Expressive, technical, and large. Use tracking-tighter for high impact. Used for H1-H4."
+    },
+    "body": {
+      "font": "IBM Plex Sans",
+      "import": "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');",
+      "strategy": "Highly readable, sterile, corporate mono-hybrid. Establishes trust and technical precision."
+    },
+    "labels": {
+      "font": "JetBrains Mono",
+      "import": "@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');",
+      "strategy": "Uppercase, tiny font size (text-xs to text-sm), extremely wide spacing (tracking-[0.2em]). Used for overlines, buttons, tickers, and data labels."
+    }
+  },
+  "colors": {
+    "background": "#050505",
+    "surface": "#0F1014",
+    "surface_glass": "rgba(15, 16, 20, 0.6)",
+    "border": "#1E2028",
+    "text_primary": "#F3F4F6",
+    "text_secondary": "#9CA3AF",
+    "accent_neon": "#00E5FF",
+    "accent_muted": "#004D56",
+    "strategy": "Dark Neon + Corporate Clean. Base is near-pitch black (Obsidian) for an executive cyberpunk vibe. The sole bright accent is Electric Cyan to highlight interactive elements and vital metrics."
+  },
+  "visual_enhancers": {
+    "borders": "1px solid #1E2028 for structural elements. 1px solid rgba(255,255,255,0.1) for glass/overlay elements. Never use thick, blocky borders.",
+    "shadows": "Minimal. Rely on borders and high contrast instead of soft drop shadows. For glowing/active states, use drop-shadow-[0_0_12px_rgba(0,229,255,0.4)].",
+    "surfaces": "Glassmorphism exclusively for the sticky header (backdrop-blur-xl bg-[#050505]/70). Solid dark surfaces for bento cards.",
+    "hover_states": "Interactive elements must transition explicitly (e.g., transition: background-color 0.3s ease, color 0.3s ease). Primary buttons should invert to bg-[#00E5FF] and text-[#050505] on hover."
+  },
+  "grids": {
+    "bento_services": "Tetris Mode (Asymmetrical): grid-cols-1 md:grid-cols-12 gap-6. Mix col-span-8 and col-span-4 to create tension. Do not make equal squares. This creates an editorial, high-end tech feel rather than a cheap template."
+  },
+  "layouts": {
+    "hero": "Min 90vh height. Left-aligned or deeply offset content. Needs a kinetic masked typography reveal (line-by-line).",
+    "marquee": "An 'Editorial Ribbon' ticker separating the hero and services. Slow-moving, monospaced text (JetBrains Mono) with tech specs or core pillars.",
+    "services": "Bento grid wrapped in a container with luxurious padding (py-32).",
+    "about": "Asymmetrical 2-column layout. High contrast text offset from the image block to create negative space/breathing room.",
+    "contact": "Clean, tight layout for form fields indicating corporate reliability. Shadcn/UI inputs customized for the dark theme."
+  },
+  "motion": {
+    "scroll": "MANDATORY: Use lenis (@studio-freight/react-lenis) for smooth momentum scrolling.",
+    "hero_reveal": "Framer motion line-by-line masked text reveal. Text lines wrapped in overflow-hidden with child variants mapping { initial: { y: '100%' }, animate: { y: 0 } }.",
+    "parallax": "Framer motion useScroll and useTransform for translating background images on the Y-axis."
+  },
+  "accessibility": {
+    "contrast": "Ensure text on dark bg meets APCA/WCAG. Do not use fully transparent backgrounds where content scrolls underneath.",
+    "motion": "Respect prefers-reduced-motion via CSS media queries or Framer Motion hooks.",
+    "testing": "All interactive elements MUST have data-testid attributes for QA."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGN5YmVyJTIwc2VjdXJpdHklMjBuZXR3b3JrfGVufDB8fHx8MTc5MDE5NzAyOHww&ixlib=rb-4.1.0&q=85",
+        "category": "hero_background",
+        "description": "Abstract blue cyber lines, to be placed behind a heavy black overlay (bg-[#050505]/80) for the hero section parallax."
+      },
+      {
+        "url": "https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "services_infrastructure",
+        "description": "Server rack with blue lighting. Use in the IT Consulting / Infrastructure bento card with an overlay."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwyfHxzb2Z0d2FyZSUyMGNvZGUlMjBzY3JlZW58ZW58MHx8fHwxNzkwMTk3MDI4fDA&ixlib=rb-4.1.0&q=85",
+        "category": "services_software",
+        "description": "Software code screen. Use in the Custom Software Development bento card."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbHMlMjBtZWV0aW5nfGVufDB8fHx8MTc5MDE5NzAyOXww&ixlib=rb-4.1.0&q=85",
+        "category": "about_team",
+        "description": "Business professionals meeting. Use in the Sobre nosotros (About) section. Best applied with a grayscale filter and cyan hover effect to match theme."
+      }
+    ]
+  },
+  "libraries": {
+    "required": [
+      "framer-motion",
+      "lucide-react",
+      "sonner",
+      "react-fast-marquee",
+      "@studio-freight/react-lenis",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "notes": "Use Shadcn components for complex interactive logic (forms, inputs, textareas, toasts). Combine them with the styling rules above."
+  },
+  "instructions_to_main_agent": [
+    "Use Tailwind CSS extensively. Import the specified Google Fonts in your root CSS file and map them in tailwind.config.js.",
+    "For the SWIFT TASK logo, design a custom SVG wordmark directly in the React code. Use a blocky/tech font style with an electric cyan accent (e.g., a glowing square node replacing the dot on the 'i' or at the end of the text).",
+    "Build the functional Contact Form (Contacto) using Shadcn Form/Input/Textarea. Simulate backend save with a setTimeout and trigger a success Toast using Sonner.",
+    "Ensure 'data-testid' attributes are added to the form submit button (e.g., data-testid='contact-submit-button') and all navigation links.",
+    "Strictly follow the Dark Neon + Corporate Clean theme. No white backgrounds allowed except for text and highly specific accents.",
+    "Do NOT center-align the main app container. Let the text align naturally (left) to support the B2B aesthetic.",
+    "Include the Marquee between the Hero and Services, with tech terminology like '[ ENCRYPTION: ACTIVE ] /// [ INFRASTRUCTURE: SCALABLE ] /// [ ZERO TRUST ]'."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You MUST NOT apply universal transitions (e.g., transition: all). Add transitions for specific properties.",
+    "You MUST NOT center align the app container (.App { text-align: center; }).",
+    "Create depth through layered design elements with z-index hierarchy and glass-morphism (backdrop-blur-xl).",
+    "Never use placeholder URLs. Use the exact provided image URLs in the media section.",
+    "Every interaction needs micro-animations - hover states, explicit active states, and focus-visible rings.",
+    "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  ]
+}
