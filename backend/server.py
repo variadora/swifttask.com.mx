@@ -6,6 +6,7 @@ import os
 import re
 import ipaddress
 import secrets
+import asyncio
 import logging
 import jwt
 import httpx
@@ -297,18 +298,19 @@ async def create_contact_message(payload: ContactMessageCreate):
     await db.contact_messages.insert_one(doc)
     logger.info("New contact message from %s <%s>", msg.name, msg.email)
 
-    # Send confirmation email to the submitter (non-blocking failure)
-    try:
-        await send_email(
-            to=msg.email,
-            subject="Recibimos tu mensaje · SWIFT TASK",
-            html=_confirmation_html(msg.name, msg.service, msg.message),
-        )
-    except Exception as e:
-        logger.error("Confirmation email failed for %s: %s", msg.email, e)
+    async def _confirm():
+        try:
+            await send_email(
+                to=msg.email,
+                subject="Recibimos tu mensaje · SWIFT TASK",
+                html=_confirmation_html(msg.name, msg.service, msg.message),
+            )
+        except Exception as e:
+            logger.error("Confirmation email failed for %s: %s", msg.email, e)
 
-    # Send internal alert to the team (non-blocking failure)
-    if TEAM_NOTIFY_EMAIL:
+    async def _team():
+        if not TEAM_NOTIFY_EMAIL:
+            return
         try:
             await send_email(
                 to=TEAM_NOTIFY_EMAIL,
@@ -316,7 +318,10 @@ async def create_contact_message(payload: ContactMessageCreate):
                 html=_team_alert_html(msg),
             )
         except Exception as e:
-            logger.error("Team alert email failed: %s", e)
+            logger.warning("Team alert email not delivered to %s: %s", TEAM_NOTIFY_EMAIL, e)
+
+    # Send both emails concurrently; failures are isolated and non-blocking.
+    await asyncio.gather(_confirm(), _team())
 
     return msg
 
